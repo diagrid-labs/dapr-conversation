@@ -1,0 +1,30 @@
+apiVersion: dapr.io/v1alpha1
+kind: Resiliency
+metadata:
+  name: llm-resiliency
+scopes:
+  - secure-app
+spec:
+  policies:
+    timeouts:
+      llm-timeout: 60s
+    retries:
+      llm-retry:
+        policy: exponential
+        maxRetries: 3
+        maxInterval: 10s
+        matching:
+          httpStatusCodes: 429,500,502-504
+    circuitBreakers:
+      llm-circuit-breaker:
+        maxRequests: 1
+        timeout: 300s
+        trip: consecutiveFailures > 5
+        interval: 0s
+  targets:
+    components:
+      openai:
+        outbound:
+          timeout: llm-timeout
+          retry: llm-retry
+          circuitBreaker: llm-circuit-breaker

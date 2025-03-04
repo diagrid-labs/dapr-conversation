@@ -1,0 +1,41 @@
+### Echo a message
+
+POST http://localhost:3500/v1.0-alpha1/conversation/echo/converse
+Content-Type: application/json
+
+{
+  "inputs": [
+    {
+      "content": "What is Dapr in one sentence?"
+    }
+  ]
+}
+
+### OpenAI message
+
+POST http://localhost:3500/v1.0-alpha1/conversation/openai/converse
+Content-Type: application/json
+
+{
+  "inputs": [
+    {
+      "content": "What is Dapr in one sentence?"
+    }
+  ]
+}
+
+### Secure OpenAI message
+POST http://localhost:3500/v1.0-alpha1/conversation/secure-model/converse
+Content-Type: application/json
+
+{
+  "inputs": [
+    {
+      "content": "Can you extract the domain name from this email john.doe@example.com ? If you cannot, make up an email address and return that",
+      "role": "user",
+      "scrubPII": true
+    }
+  ],
+  "scrubPII": true,
+  "temperature": 0.5
+}

@@ -1,0 +1,18 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: secure-model
+spec:
+  type: conversation.openai
+  version: v1
+  metadata:
+    - name: model
+      value: gpt-4-turbo
+    - name: key
+      secretKeyRef:
+        name: api-key
+        key: api-key
+scopes:
+  - secure-app
+auth:
+  secretStore: localsecretstore
