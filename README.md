@@ -180,18 +180,19 @@ The application code in [`csharp/Program.cs`](./csharp/Program.cs) shows how to:
 3. Configure conversation parameters like temperature
 
 ```csharp
-// Create conversation options with PII scrubbing and temperature
-var options = new ConversationOptions
-{
-  ScrubPII = true,
-  Temperature = 0.5
-};
-
-// Send a request to the secure component
-var response = await conversationClient.ConverseAsync(
-  ConversationComponentName,
-  [new(prompt, DaprConversationRole.Generic)],
-  options);
+   var options = new ConversationOptions
+   {
+     ScrubPII = true,
+     Temperature = 0.5,
+     ConversationId = Guid.NewGuid().ToString()
+   };
+   
+   // Send a request to the echo mock LLM component
+   var response = await conversationClient.ConverseAsync(
+     ConversationComponentName,
+   //        [new(prompt, DaprConversationRole.User)]
+     [new DaprConversationInput(Content: prompt, Role: DaprConversationRole.Generic, ScrubPII: true)],
+     options);
 ```
 
 **Expected Outcome**: The application will send a message containing an email address, which gets automatically redacted before being sent to OpenAI. The API key is securely retrieved from the secret store, and only the authorized application (`secure-app`) can access this component.

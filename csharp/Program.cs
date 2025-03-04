@@ -22,13 +22,15 @@ class Program
       var options = new ConversationOptions
       {
         ScrubPII = true,
-        Temperature = 0.5
+        Temperature = 0.5,
+        ConversationId = Guid.NewGuid().ToString()
       };
 
       // Send a request to the echo mock LLM component
       var response = await conversationClient.ConverseAsync(
         ConversationComponentName,
-        [new(prompt, DaprConversationRole.Generic)],
+//        [new(prompt, DaprConversationRole.User)]
+        [new DaprConversationInput(Content: prompt, Role: DaprConversationRole.Generic, ScrubPII: true)],
         options);
       Console.WriteLine("Input sent: " + prompt);
 
