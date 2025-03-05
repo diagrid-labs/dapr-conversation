@@ -21,9 +21,9 @@ class Program
       // Create conversation options with PII scrubbing and temperature
       var options = new ConversationOptions
       {
+        ConversationId = Guid.NewGuid().ToString(),
         ScrubPII = true,
-        Temperature = 0.5,
-        ConversationId = Guid.NewGuid().ToString()
+        Temperature = 0.5
       };
 
       // Send a request to the echo mock LLM component

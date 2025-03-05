@@ -16,7 +16,7 @@ The Echo component provides a simple way to test your Conversation API configura
 
 ### Configuration
 
-The Echo component is defined in [`components/echo.yaml`](./components/echo.yaml):
+The Echo component is defined in [`resources/echo.yaml`](./resources/echo.yaml):
 
 ```yaml
 apiVersion: dapr.io/v1alpha1
@@ -33,7 +33,7 @@ spec:
 Start a Dapr sidecar with the Echo component in the project directory. The Dapr sidecar is a process that runs alongside your application and provides the Dapr APIs.
 
 ```bash
-dapr run --app-id test-echo --resources-path ./components --dapr-http-port 3500 -- tail -f
+dapr run --app-id test-echo --resources-path ./resources --dapr-http-port 3500 -- tail -f
 ```
 
 ### Interacting with the Echo Component
@@ -61,7 +61,7 @@ After testing with the Echo component, let's switch to a real LLM provider. The 
 
 ### Configuration
 
-The OpenAI component is defined in [`components/openai.yaml`](./components/openai.yaml):
+The OpenAI component is defined in [`resources/openai.yaml`](./resources/openai.yaml):
 
 ```yaml
 apiVersion: dapr.io/v1alpha1
@@ -86,7 +86,7 @@ Simply replace `<OPENAI_API_KEY>` with your actual API key. The `cacheTTL` param
 Start a Dapr sidecar with the OpenAI component:
 
 ```bash
-dapr run --app-id test-openai --resources-path ./components --dapr-http-port 3500 -- tail -f
+dapr run --app-id test-openai --resources-path ./resources --dapr-http-port 3500 -- tail -f
 ```
 
 Send a request using the HTTP API as shown in [`http/test.rest`](./http/test.rest):
@@ -112,7 +112,7 @@ For production environments, embedding API keys directly in component files is n
 
 ### Configuration
 
-The secure component in [`components/secure-component.yaml`](./components/secure-component.yaml) references a secret store:
+The secure component in [`resources/secure-component.yaml`](./resources/secure-component.yaml) references a secret store:
 
 ```yaml
 apiVersion: dapr.io/v1alpha1
@@ -135,7 +135,7 @@ auth:
   secretStore: localsecretstore
 ```
 
-The secret store configuration in [`components/localsecretstore.yaml`](./components/localsecretstore.yaml):
+The secret store configuration in [`resources/localsecretstore.yaml`](./resources/localsecretstore.yaml):
 
 ```yaml
 apiVersion: dapr.io/v1alpha1
@@ -147,14 +147,14 @@ spec:
   version: v1
   metadata:
   - name: secretsFile
-    value: ./components/secrets.json
+    value: ./resources/secrets.json
   - name: nestedSeparator
     value: ":"
   scopes:
     - secure-app
 ```
 
-For local development, we're using a local file secret store that reads from [`components/secrets.json`](./components/secrets.json), but in production, this could be replaced with Azure Key Vault, AWS Secrets Manager, HashiCorp Vault, or other enterprise secret providers without changing your application code.
+For local development, we're using a local file secret store that reads from [`resources/secrets.json`](./resources/secrets.json), but in production, this could be replaced with Azure Key Vault, AWS Secrets Manager, HashiCorp Vault, or other enterprise secret providers without changing your application code.
 
 ### Using the .NET SDK with PII Protection
 
@@ -171,7 +171,7 @@ cd ..
 Then run the Dapr sidecar with the application (note that we run from the project root as secret file locations are relative):
 
 ```bash
-dapr run --app-id secure-app --resources-path ./components --dapr-http-port 3500 -- dotnet run --project ./csharp
+dapr run --app-id secure-app --resources-path ./resources --dapr-http-port 3500 -- dotnet run --project ./csharp
 ```
 
 The application code in [`csharp/Program.cs`](./csharp/Program.cs) shows how to:
@@ -203,7 +203,7 @@ LLM services can be unreliable due to rate limits, temporary outages, or network
 
 ### Configuration
 
-The resiliency configuration in [`components/resiliency.yaml`](./components/resiliency.yaml) defines policies for timeouts, retries, and circuit breaking:
+The resiliency configuration in [`resources/resiliency.yaml`](./resources/resiliency.yaml) defines policies for timeouts, retries, and circuit breaking:
 
 ```yaml
 apiVersion: dapr.io/v1alpha1
@@ -251,7 +251,7 @@ To monitor LLM interactions in production, you need visibility into request flow
 
 ### Configuration
 
-The tracing configuration in [`components/tracing-config.yaml`](./components/tracing-config.yaml):
+The tracing configuration in [`resources/tracing-config.yaml`](./resources/tracing-config.yaml):
 
 ```yaml
 apiVersion: dapr.io/v1alpha1
@@ -273,7 +273,7 @@ When running Dapr locally with the CLI, Zipkin is already started for you, makin
 Start the Dapr sidecar with tracing enabled and a specific metrics port:
 
 ```bash
-dapr run --app-id secure-app --resources-path ./components --dapr-http-port 3500 --config=./components/tracing-config.yaml --metrics-port 9090 -- tail -f
+dapr run --app-id secure-app --resources-path ./resources --dapr-http-port 3500 --config=./resources/tracing-config.yaml --metrics-port 9090 -- tail -f
 ```
 
 You can explore traces in Zipkin at:
@@ -289,7 +289,7 @@ Beyond traces, Dapr provides detailed metrics for LLM operations that you can mo
 
 ### Configuration
 
-The Prometheus configuration in [`components/prometheus.yml`](./components/prometheus.yml):
+The Prometheus configuration in [`resources/prometheus.yml`](./resources/prometheus.yml):
 
 ```yaml
 global:
@@ -311,7 +311,7 @@ With the setup from step 5 still running, start Prometheus in a separate termina
 
 ```bash
 docker run -p 9099:9099 \
-    -v $(pwd)/components/prometheus.yml:/etc/prometheus/prometheus.yml \
+    -v $(pwd)/resources/prometheus.yml:/etc/prometheus/prometheus.yml \
     prom/prometheus --config.file=/etc/prometheus/prometheus.yml --web.listen-address=:9099
 ```
 

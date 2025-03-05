@@ -1,0 +1,9 @@
+version: 1
+common:
+  resourcesPath: resources
+apps:
+  - appID: secure-app
+    appDirPath: csharp
+    command: ["dotnet", "run"]
+    appLogDestination: console
+    daprdLogDestination: console
